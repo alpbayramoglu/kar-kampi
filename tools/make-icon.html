@@ -1,0 +1,35 @@
+<!doctype html><html><body style="margin:0;background:#000">
+<canvas id="c" width="512" height="512"></canvas>
+<script>
+const c = document.getElementById('c').getContext('2d'), S = 512;
+// gökyüzü
+const sky = c.createLinearGradient(0, 0, 0, S); sky.addColorStop(0, '#16284a'); sky.addColorStop(.62, '#2f5a94'); sky.addColorStop(1, '#4f7fbd');
+c.fillStyle = sky; c.fillRect(0, 0, S, S);
+// ateşin ışığı
+const glow = c.createRadialGradient(256, 330, 10, 256, 330, 230); glow.addColorStop(0, 'rgba(255,170,80,.55)'); glow.addColorStop(1, 'rgba(255,170,80,0)');
+c.fillStyle = glow; c.fillRect(0, 0, S, S);
+// kar taneleri / yıldızlar
+c.fillStyle = 'rgba(255,255,255,.85)';
+for (const [x, y, r] of [[78, 82, 5], [150, 46, 3.5], [402, 70, 5], [452, 150, 3.5], [60, 170, 3], [330, 40, 3], [230, 92, 2.5], [470, 240, 3]]) { c.beginPath(); c.arc(x, y, r, 0, 7); c.fill(); }
+// arkadaki çam ağaçları
+function pine(x, y, h, col) { c.fillStyle = col; for (let i = 0; i < 3; i++) { const w = h * (.42 - i * .1), yy = y - i * h * .26; c.beginPath(); c.moveTo(x - w, yy); c.lineTo(x, yy - h * .42); c.lineTo(x + w, yy); c.closePath(); c.fill(); } }
+pine(92, 330, 190, '#1f3f6a'); pine(420, 320, 210, '#1f3f6a'); pine(150, 345, 130, '#28507f'); pine(372, 342, 140, '#28507f');
+// karlı zemin
+c.fillStyle = '#eaf2fb'; c.beginPath(); c.moveTo(0, 360); c.quadraticCurveTo(256, 300, 512, 360); c.lineTo(512, 512); c.lineTo(0, 512); c.closePath(); c.fill();
+c.fillStyle = 'rgba(255,190,120,.35)'; c.beginPath(); c.ellipse(256, 395, 170, 48, 0, 0, 7); c.fill();
+// kütükler
+function log(x1, y1, x2, y2) { c.strokeStyle = '#7a4526'; c.lineWidth = 34; c.lineCap = 'round'; c.beginPath(); c.moveTo(x1, y1); c.lineTo(x2, y2); c.stroke();
+  c.strokeStyle = '#a8673d'; c.lineWidth = 14; c.beginPath(); c.moveTo(x1 + 6, y1 - 8); c.lineTo(x2 - 6, y2 - 8); c.stroke();
+  c.fillStyle = '#e6b27a'; c.beginPath(); c.arc(x2, y2, 15, 0, 7); c.fill(); c.strokeStyle = '#b07a48'; c.lineWidth = 3; c.beginPath(); c.arc(x2, y2, 8, 0, 7); c.stroke(); }
+// alev
+function flame(scale, col, dy = 0) { c.fillStyle = col; c.beginPath(); const b = 392 + dy, w = 92 * scale, h = 250 * scale;
+  c.moveTo(256 - w, b); c.bezierCurveTo(256 - w * 1.15, b - h * .45, 256 - w * .25, b - h * .55, 256 - w * .1, b - h);
+  c.bezierCurveTo(256 + w * .2, b - h * .7, 256 + w * .55, b - h * .75, 256 + w * .55, b - h * .62);
+  c.bezierCurveTo(256 + w * 1.2, b - h * .4, 256 + w * 1.05, b - h * .1, 256 + w, b); c.closePath(); c.fill(); }
+flame(1, '#ff5a1f'); flame(.74, '#ff9a26', -4); flame(.5, '#ffd25a', -8); flame(.26, '#fff3c4', -10);
+log(150, 420, 340, 382); log(362, 420, 172, 382);
+// taşlar
+for (const [x, y, rx, ry] of [[128, 430, 30, 20], [178, 446, 30, 20], [236, 452, 32, 20], [296, 450, 32, 20], [352, 442, 30, 20], [394, 426, 28, 19]]) {
+  c.fillStyle = '#8b939f'; c.beginPath(); c.ellipse(x, y, rx, ry, 0, 0, 7); c.fill();
+  c.fillStyle = '#f4f8fc'; c.beginPath(); c.ellipse(x - 2, y - ry * .55, rx * .7, ry * .38, 0, 0, 7); c.fill(); }
+</script></body></html>
